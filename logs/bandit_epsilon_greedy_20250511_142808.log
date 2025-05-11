@@ -1,0 +1,5 @@
+2025-05-11 14:28:08,959 - bandit_epsilon_greedy - INFO - Starting experiment with args: Namespace(strategy='epsilon_greedy', epsilon=0.1, c=2.0, n_arms=10, distribution='normal', n_steps=1000, n_runs=10)
+2025-05-11 14:28:32,693 - bandit_epsilon_greedy - INFO - Results saved to results/bandit_epsilon_greedy.png
+2025-05-11 14:28:32,693 - bandit_epsilon_greedy - INFO - Final average reward: 1.5583
+2025-05-11 14:28:32,693 - bandit_epsilon_greedy - INFO - Final percentage of optimal actions: 90.00%
+2025-05-11 14:28:32,693 - bandit_epsilon_greedy - INFO - Final average regret: 194.0787

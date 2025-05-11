@@ -1,0 +1,5 @@
+2025-05-11 14:47:07,096 - bandit_ucb - INFO - Starting experiment with args: Namespace(strategy='ucb', epsilon=0.01, c=2.0, n_arms=10, distribution='normal', n_steps=1000, n_runs=10)
+2025-05-11 14:47:15,294 - bandit_ucb - INFO - Results saved to results/bandit_ucb.png
+2025-05-11 14:47:15,294 - bandit_ucb - INFO - Final average reward: 1.1604
+2025-05-11 14:47:15,295 - bandit_ucb - INFO - Final percentage of optimal actions: 90.00%
+2025-05-11 14:47:15,295 - bandit_ucb - INFO - Final average regret: 148.8023

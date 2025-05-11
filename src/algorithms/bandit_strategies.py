@@ -25,7 +25,10 @@ class EpsilonGreedy:
         # TODO: Implement epsilon-greedy action selection ????
         # Hint: With probability epsilon, choose a random arm
         # Otherwise, choose the arm with the highest estimated value
-        pass
+        if np.random.rand() < self.epsilon:
+            return np.random.randint(self.n_arms)
+        else:
+            return np.argmax(self.q_values)
         
     def update(self, arm, reward):
         """
@@ -38,7 +41,8 @@ class EpsilonGreedy:
         # TODO: Implement the update rule for the value estimate
         # Hint: Use incremental update formula to update the value estimate for the selected arm
         # Remember to also update the count for the selected arm
-        pass
+        self.arm_counts[arm] += 1
+        self.q_values[arm] += (reward - self.q_values[arm]) / self.arm_counts[arm]
 
 
 class UCB:
@@ -69,7 +73,12 @@ class UCB:
         # where Q(a) is the current value estimate, t is the total time steps,
         # and N(a) is the number of times arm a has been selected
         # Return the arm with the highest UCB value
-        pass
+        for arm in range(self.n_arms):
+            if self.arm_counts[arm]==0:
+                return arm
+
+        ucb_values = self.q_values + self.c * np.sqrt(np.log(self.t)/self.arm_counts)   
+        return np.argmax(ucb_values)
         
     def update(self, arm, reward):
         """
@@ -81,4 +90,6 @@ class UCB:
         """
         # TODO: Implement the update rule for the value estimate
         # Remember to also update the count for the selected arm and the total time step
-        pass 
+        self.arm_counts[arm] +=1
+        self.t +=1
+        self.q_values[arm]+=(reward-self.q_values[arm])/self.arm_counts[arm]
