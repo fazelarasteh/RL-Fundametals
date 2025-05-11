@@ -28,9 +28,25 @@ def value_iteration(env, gamma=0.99, theta=1e-8, max_iterations=1000):
     #      c. Update delta = max(delta, |v - V[s]|)
     #   3. If delta < theta, break
     
+    for i in range(max_iterations):
+        delta = 0
+        for state in states:
+            v = V[state]
+            new_V = max(sum(env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
+                        for next_state in states)
+                        for action in actions)
+            delta = max(delta, abs(v - new_V))
+            V[state] = new_V
+        if delta < theta:
+            break
+            
     # TODO: Extract policy from value function
     # For each state, choose the action that maximizes the value
     policy = {state: None for state in states}  # Replace None with the best action
+
+    for state in states:
+        policy[state]= max(actions, key=lambda action: sum(env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
+                        for next_state in states))
     
     return V, policy
 
@@ -60,7 +76,18 @@ def policy_evaluation(env, policy, gamma=0.99, theta=1e-8, max_iterations=1000):
     #      b. Calculate new V[s] = sum_s' p(s'|s,policy[s])[r(s,policy[s],s') + gamma*V[s']]
     #      c. Update delta = max(delta, |v - V[s]|)
     #   3. If delta < theta, break
-    
+    for i in range(max_iterations):
+        delta = 0
+        for state in states:
+            v = V[state]
+            new_V = sum(env.get_transition_prob(state,policy[state],next_state)*(env.get_reward(state,policy[state],next_state) + gamma*V[next_state]) 
+                        for next_state in states)
+            delta = max(delta, abs(v - new_V))
+            V[state] = new_V
+        if delta < theta:
+            break
+
+
     return V
 
 def policy_improvement(env, V, gamma=0.99):
@@ -81,7 +108,9 @@ def policy_improvement(env, V, gamma=0.99):
     
     # TODO: Implement policy improvement algorithm
     # For each state, choose the action that maximizes the value
-    
+    for state in states:
+        policy[state]= max(actions, key=lambda action: sum(env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
+                        for next_state in states))
     return policy
 
 def policy_iteration(env, gamma=0.99, theta=1e-8, max_iterations=1000):
@@ -106,5 +135,11 @@ def policy_iteration(env, gamma=0.99, theta=1e-8, max_iterations=1000):
     # 1. Policy Evaluation: Compute V^(pi) using policy evaluation
     # 2. Policy Improvement: Compute pi' = greedy(V^(pi))
     # 3. If pi' = pi, stop and return V and pi; otherwise, go to step 1
+    for i in range(max_iterations):
+        V = policy_evaluation(env,policy,gamma,theta)
+        policy_new = policy_improvement(env,V,gamma)
+        if policy_new == policy:
+            break
+        policy = policy_new
     
     return V, policy 

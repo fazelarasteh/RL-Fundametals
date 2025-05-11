@@ -184,3 +184,62 @@ class GridWorld:
             list: List of all actions
         """
         return [self.UP, self.RIGHT, self.DOWN, self.LEFT] 
+        
+    def get_transition_prob(self, state, action, next_state):
+        """
+        Get the transition probability from state to next_state by taking action
+        Since this is a deterministic environment, the probability is either 1.0 or 0.0
+        
+        Args:
+            state (tuple): Current state (x, y)
+            action (int): Action to take
+            next_state (tuple): Next state (x, y)
+            
+        Returns:
+            float: Transition probability (1.0 or 0.0)
+        """
+        # If state is invalid or an obstacle, return 0
+        if state not in self.get_all_states():
+            return 0.0
+            
+        # Calculate the expected next state
+        x, y = state
+        expected_next_state = state  # Default to current state (for obstacles/boundaries)
+        
+        if action == self.UP:
+            if y + 1 < self.height:
+                expected_next_state = (x, y + 1)
+        elif action == self.RIGHT:
+            if x + 1 < self.width:
+                expected_next_state = (x + 1, y)
+        elif action == self.DOWN:
+            if y - 1 >= 0:
+                expected_next_state = (x, y - 1)
+        elif action == self.LEFT:
+            if x - 1 >= 0:
+                expected_next_state = (x - 1, y)
+        
+        # If expected next state is an obstacle, stay in place
+        if expected_next_state in self.obstacles:
+            expected_next_state = state
+            
+        # Return 1.0 if next_state matches expected_next_state, 0.0 otherwise
+        return 1.0 if expected_next_state == next_state else 0.0
+        
+    def get_reward(self, state, action, next_state):
+        """
+        Get the reward for transitioning from state to next_state by taking action
+        
+        Args:
+            state (tuple): Current state (x, y)
+            action (int): Action to take
+            next_state (tuple): Next state (x, y)
+            
+        Returns:
+            float: Reward value
+        """
+        # If next state is the goal, return positive reward
+        if next_state == self.goal_pos:
+            return 1.0
+        # Otherwise return small negative reward
+        return -0.01 
