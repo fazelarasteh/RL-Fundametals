@@ -20,6 +20,14 @@
             "program": "${workspaceFolder}/src/run_function_approximation.py",
             "console": "integratedTerminal",
             "args": ["--algorithm", "deep", "--episodes", "500", "--obstacles"]
+        },
+        {
+            "name": "Policy Gradient",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/run_policy_gradient.py",
+            "console": "integratedTerminal",
+            "args": ["--algorithm", "reinforce", "--episodes", "100", "--obstacles"]
         }
     ]
 }

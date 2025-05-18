@@ -2,8 +2,8 @@
 import numpy as np
 import argparse
 import matplotlib.pyplot as plt
-from src.environments.gridworld import GridWorldEnv
-from src.algorithms.policy_gradient import (
+from environments.gridworld import GridWorld
+from algorithms.policy_gradient import (
     REINFORCEAgent, 
     REINFORCEWithBaseline, 
     ActorCritic, 
@@ -68,7 +68,7 @@ def run_experiment(env, agent, num_episodes, render_every=None):
 def create_agent(env, algorithm, learning_rate=0.01, gamma=0.99):
     """Create a policy gradient agent"""
     input_dim = 25  # For 5x5 GridWorld with one-hot encoding
-    num_actions = len(env.actions)
+    num_actions = len(env.get_all_actions())
     
     if algorithm == 'reinforce':
         return REINFORCEAgent(input_dim, num_actions, alpha=learning_rate, gamma=gamma)
@@ -129,14 +129,14 @@ def main():
     args = parser.parse_args()
     
     # Create environment
-    env = GridWorldEnv(size=5, obstacles=args.obstacles)
+    env = GridWorld(width=5, height=5, obstacles=[] if not args.obstacles else [(1, 1), (2, 3), (3, 1)])
     
     # Wrap environment to transform states to features
     class FeatureEnv:
         def __init__(self, env, feature_extractor):
             self.env = env
             self.feature_extractor = feature_extractor
-            self.actions = env.actions
+            self.actions = env.get_all_actions()
         
         def reset(self):
             state = self.env.reset()
