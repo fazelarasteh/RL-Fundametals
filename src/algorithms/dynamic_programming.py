@@ -32,21 +32,19 @@ def value_iteration(env, gamma=0.99, theta=1e-8, max_iterations=1000):
         delta = 0
         for state in states:
             v = V[state]
-            new_V = max(sum(env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
-                        for next_state in states)
-                        for action in actions)
+            new_V = max(
+                        sum(
+                            env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
+                            for next_state in states
+                        )
+                        for action in actions
+                    )
             delta = max(delta, abs(v - new_V))
             V[state] = new_V
         if delta < theta:
             break
-            
-    # TODO: Extract policy from value function
-    # For each state, choose the action that maximizes the value
-    policy = {state: None for state in states}  # Replace None with the best action
 
-    for state in states:
-        policy[state]= max(actions, key=lambda action: sum(env.get_transition_prob(state,action,next_state)*(env.get_reward(state,action,next_state) + gamma*V[next_state]) 
-                        for next_state in states))
+    policy = policy_improvement(env, V, gamma)
     
     return V, policy
 
@@ -86,8 +84,7 @@ def policy_evaluation(env, policy, gamma=0.99, theta=1e-8, max_iterations=1000):
             V[state] = new_V
         if delta < theta:
             break
-
-
+        
     return V
 
 def policy_improvement(env, V, gamma=0.99):

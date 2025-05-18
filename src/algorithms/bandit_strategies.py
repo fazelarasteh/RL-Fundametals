@@ -43,6 +43,9 @@ class EpsilonGreedy:
         # Remember to also update the count for the selected arm
         self.arm_counts[arm] += 1
         self.q_values[arm] += (reward - self.q_values[arm]) / self.arm_counts[arm]
+        #alternatively:
+        # self.q_values[arm] = (self.arm_counts[arm]*self.q_values[arm]+reward) / (self.arm_counts[arm]+1)
+        # self.arm_counts[arm] += 1
 
 
 class UCB:

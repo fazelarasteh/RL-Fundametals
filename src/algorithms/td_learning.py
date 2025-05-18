@@ -67,12 +67,14 @@ class SARSA(TDAgent):
             next_state: Next state
             done: Whether the episode is done
         """
-        # TODO: Implement SARSA update rule
-        # 1. Select next action using the policy (epsilon-greedy)
-        # 2. Update Q-value using the SARSA update rule:
-        #    Q(s,a) <- Q(s,a) + alpha * [r + gamma * Q(s',a') - Q(s,a)]
-        # 3. If done (terminal state), the Q-value for the next state is 0
-        pass
+        # Select next action using the policy (epsilon-greedy)
+        next_action = self.get_action(next_state)
+        
+        # Update Q-value using the SARSA update rule:
+        # Q(s,a) <- Q(s,a) + alpha * [r + gamma * Q(s',a') - Q(s,a)]
+        self.q_table[state][action] += self.alpha * (
+            reward + self.gamma * self.q_table[next_state][next_action] * (1-done) - self.q_table[state][action]
+        )
 
 
 class QLearning(TDAgent):
@@ -89,11 +91,12 @@ class QLearning(TDAgent):
             next_state: Next state
             done: Whether the episode is done
         """
-        # TODO: Implement Q-Learning update rule
-        # 1. Update Q-value using the Q-Learning update rule:
-        #    Q(s,a) <- Q(s,a) + alpha * [r + gamma * max_a' Q(s',a') - Q(s,a)]
-        # 2. If done (terminal state), the Q-value for the next state is 0
-        pass
+        # Update Q-value using the Q-Learning update rule:
+        # Q(s,a) <- Q(s,a) + alpha * [r + gamma * max_a' Q(s',a') - Q(s,a)]
+        max_next_q_value = np.max(self.q_table[next_state])
+        self.q_table[state][action] += self.alpha * (
+            reward + self.gamma * max_next_q_value * (1-done) - self.q_table[state][action]
+        )
 
 
 def run_episode(env, agent, max_steps=1000, render=False):

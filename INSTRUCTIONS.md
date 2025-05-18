@@ -73,21 +73,48 @@ python src/run_td_learning.py --algorithm sarsa --episodes 500
 python src/run_td_learning.py --algorithm q_learning --episodes 500 --obstacles
 ```
 
-### 4. Function Approximation (Next Steps)
+### 4. Function Approximation
 
-After mastering tabular methods, move to function approximation:
+Move from tabular methods to function approximation:
 
-- Implement linear function approximation for Q-learning
-- Explore simple neural networks for Q-value estimation
-- Experiment with experience replay
+- **Linear Function Approximation** in `src/algorithms/function_approximation.py`
+  - Complete the `update()` method in the `LinearQFunctionApproximation` class
+  - Implement Q-learning with linear function approximation
+  - The method should update weights using the Q-learning update rule and gradient descent
 
-### 5. Policy Gradient Methods (Advanced)
+- **Deep Q-Network (DQN)**
+  - Complete the missing parts in the `DeepQNetwork` class
+  - Implement neural network initialization, action selection, and experience replay
+  - Implement the batch update method to train the network
 
-For more advanced implementations:
+**Test your implementation:**
+```bash
+python src/run_function_approximation.py --algorithm linear --episodes 500
+python src/run_function_approximation.py --algorithm deep --episodes 500 --obstacles
+```
 
-- Implement REINFORCE algorithm
-- Add baseline for variance reduction
-- Implement Actor-Critic methods
+### 5. Policy Gradient Methods
+
+Implement policy-based methods:
+
+- **REINFORCE** in `src/algorithms/policy_gradient.py`
+  - Complete the `end_episode()` method in the `REINFORCEAgent` class
+  - Calculate discounted returns and update policy parameters
+
+- **REINFORCE with Baseline**
+  - Complete the `end_episode()` method in the `REINFORCEWithBaseline` class
+  - Implement baseline calculation to reduce variance
+
+- **Actor-Critic**
+  - Complete the `update()` method in the `ActorCritic` class
+  - Implement TD error calculation and actor-critic updates
+
+**Test your implementation:**
+```bash
+python src/run_policy_gradient.py --algorithm reinforce --episodes 1000
+python src/run_policy_gradient.py --algorithm reinforce_baseline --episodes 1000
+python src/run_policy_gradient.py --algorithm actor_critic --episodes 1000 --obstacles
+```
 
 ## Guidance for Implementation
 
@@ -104,6 +131,8 @@ When implementing the algorithms, follow these best practices:
 - For bandits: Check if your agent converges to the optimal arm over time
 - For DP: Verify that your value function converges and the resulting policy is sensible
 - For TD: Compare the performance of different algorithms and parameter settings
+- For function approximation: Check if the weights converge and the features are appropriate
+- For policy gradient: Monitor the policy entropy and ensure the policy is improving
 
 ## Resources
 
